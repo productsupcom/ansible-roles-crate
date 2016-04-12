@@ -13,7 +13,11 @@ CRATE_MIN_MEM=256m
 CRATE_MAX_MEM=1g
 
 # Heap Size (defaults to 256m min, 1g max)
+{% if ansible_memtotal_mb > 30500 %}
 CRATE_HEAP_SIZE=30500m
+{% else %}
+CRATE_HEAD_SIZE={{ (ansible_memtotal_mb / 2) |round|int }}m
+{% endif %}
 
 # Maximum number of open files, defaults to 65535.
 #MAX_OPEN_FILES=65535
