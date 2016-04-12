@@ -1,0 +1,22 @@
+- apt: name=apt-transport-https state=present
+
+- apt_key: url=https://cdn.crate.io/downloads/apt/DEB-GPG-KEY-crate
+- apt_repository: repo='deb https://cdn.crate.io/downloads/apt/stable/ jessie main' state=present
+- apt_repository: repo='deb-src https://cdn.crate.io/downloads/apt/stable/ jessie main' state=present
+
+# we need backports for crate for java8-runtime
+- apt_repository: repo='deb http://ftp.debian.org/debian jessie-backports main' state=present
+
+- apt: name=crate state=present update_cache=no
+
+- service: name=crate state=stopped
+
+- template: src=crate.yml.j2 dest=/etc/crate/crate.yml mode=0755
+- template: src=default_crate.j2 dest=/etc/default/crate mode=0755
+
+- sysctl: state=present name=net.ipv6.conf.all.disable_ipv6 value=1
+- sysctl: state=present name=net.ipv6.conf.default.disable_ipv6 value=1
+- sysctl: state=present name=net.ipv6.conf.lo.disable_ipv6 value=1
+- sysctl: state=present name=net.ipv6.conf.eth0.disable_ipv6 value=1
+
+- service: name=crate state=started

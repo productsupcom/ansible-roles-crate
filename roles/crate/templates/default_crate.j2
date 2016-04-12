@@ -1,0 +1,28 @@
+# Run CRATE as this user ID and group ID
+#CRATE_USER=crate
+#CRATE_GROUP=crate
+
+CRATE_HOME=/usr/share/crate
+CRATE_PATH_LOG=/var/log/crate
+CRATE_PATH_WORK=/usr/share/crate
+CRATE_PATH_CONF=/usr/share/crate
+CRATE_CONFIG=/usr/share/crate/config/crate.yml
+
+CRATE_INCLUDE=/usr/share/crate/bin/crate.in.sh
+CRATE_MIN_MEM=256m
+CRATE_MAX_MEM=1g
+
+# Heap Size (defaults to 256m min, 1g max)
+CRATE_HEAP_SIZE=30500m
+
+# Maximum number of open files, defaults to 65535.
+#MAX_OPEN_FILES=65535
+
+# Maximum locked memory size. Set to "unlimited" if you use the
+# bootstrap.mlockall option in crate.yml. You must also set
+# CRATE_HEAP_SIZE.
+MAX_LOCKED_MEMORY=unlimited
+
+# Additional Java OPTS
+#CRATE_JAVA_OPTS=
+#

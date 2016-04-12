@@ -1,0 +1,11 @@
+*filter
+
+-A INPUT -m tcp -p tcp --dport 4200 -j ACCEPT
+-A OUTPUT -m tcp -p tcp --dport 4200 -j ACCEPT
+-A INPUT -m tcp -p tcp --dst 0.0.0.0,{{ ansible_eth0.ipv4.address }} --src 0.0.0.0,{{ ansible_eth0.ipv4.address }} --dport 4199 -j ACCEPT
+-A OUTPUT -m tcp -p tcp  --dst 0.0.0.0,{{ ansible_eth0.ipv4.address }} --src 0.0.0.0,{{ ansible_eth0.ipv4.address }} --dport 4199 -j ACCEPT
+
+-A INPUT -m tcp -p tcp --src 0.0.0.0{% for host in groups['crate'] %},{{ hostvars[host]['ansible_eth0']['ipv4']['address'] }}{% endfor %} -j ACCEPT
+-A OUTPUT -m tcp -p tcp --dst 0.0.0.0{% for host in groups['crate'] %},{{ hostvars[host]['ansible_eth0']['ipv4']['address'] }}{% endfor %} -j ACCEPT
+
+COMMIT

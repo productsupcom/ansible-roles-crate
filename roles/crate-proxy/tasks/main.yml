@@ -1,0 +1,15 @@
+---
+
+- file: path=/etc/iptables state=directory owner=root group=root
+
+- template: src=crate-rules-pre-up.j2 dest=/etc/iptables/crate-rules-pre-up owner=root group=root mode="u=rwx,g=rx,o=rx"
+
+- template: src=crate-iptables-if-pre-up.j2 dest=/etc/network/if-pre-up.d/iptables-crate owner=root group=root mode="u=rwx,g=rx,o=rx"
+
+- name: Install HAProxy
+  apt: name=haproxy state=present default_release=jessie-backports
+  when: ansible_distribution_release == 'jessie'
+
+- template: src=crate-proxy.cfg.j2 dest=/etc/haproxy/haproxy.cfg owner=root group=root mode=0755
+
+- service: name=haproxy state=restarted

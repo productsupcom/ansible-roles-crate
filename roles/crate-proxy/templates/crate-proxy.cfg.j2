@@ -1,0 +1,43 @@
+# {{ ansible_managed }}
+
+global
+    log 127.0.0.1   local0
+    log 127.0.0.1   local1 notice
+    maxconn 2048
+    user haproxy
+    group haproxy
+    daemon
+
+defaults
+    log     global
+    mode    http
+    option  httplog
+    option  dontlognull
+    option  forwardfor
+    option  http-server-close
+    retries 3
+    timeout connect 5000ms
+    timeout client  50000ms
+    timeout server  50000ms
+
+userlist UsersFor_Crate
+    user {{ basic_auth_user }} insecure-password {{ basic_auth_password }}
+
+listen crate
+    bind *:{{ haproxy_http_port }}
+    acl AuthOkayFor_Crate http_auth(UsersFor_Crate)
+    http-request auth realm Crate if !AuthOkayFor_Crate
+    balance leastconn
+    option httpclose
+    option forwardfor
+    server {{ ansible_hostname }} {{ ansible_eth0.ipv4.address }}:{{ crate_http_port }}
+
+## HAProxy stats web gui.
+listen stats
+    bind :9000
+    mode http
+    stats enable
+    stats uri /haproxy_stats
+    stats realm HAProxy\ Statistics
+    stats auth {{ haproxy_stats_username }}:{{ haproxy_stats_password }}
+    stats admin if TRUE

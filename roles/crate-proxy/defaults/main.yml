@@ -1,0 +1,7 @@
+basic_auth_user: crate
+basic_auth_password: justgiveaccess
+crate_http_port: 4199
+haproxy_http_port: 4200
+haproxy_stats_username: haproxy
+haproxy_stats_password: secret
+haproxy_domain: crate.yourdomain.com
